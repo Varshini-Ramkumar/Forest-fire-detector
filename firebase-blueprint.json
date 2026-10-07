@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role-based access for forest officials and administrators",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["admin", "official"] },
+        "department": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string" },
+        "active": { "type": "boolean" }
+      },
+      "required": ["name", "email", "role", "department", "active"]
+    },
+    "SensorNode": {
+      "title": "SensorNode",
+      "description": "Solar-powered LoRa IoT sensor node deployed in forest zones",
+      "type": "object",
+      "properties": {
+        "nodeName": { "type": "string", "maxLength": 80 },
+        "zoneId": { "type": "string", "maxLength": 50 },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "temperature": { "type": "number" },
+        "humidity": { "type": "number" },
+        "smokeLevel": { "type": "number" },
+        "flameDetected": { "type": "boolean" },
+        "batteryLevel": { "type": "number" },
+        "status": { "type": "string", "enum": ["Online", "Offline", "Warning", "Critical"] },
+        "lastUpdated": { "type": "string" },
+        "riskLevel": { "type": "string", "enum": ["Low", "Moderate", "High", "Critical"] }
+      },
+      "required": ["nodeName", "zoneId", "temperature", "humidity", "smokeLevel", "flameDetected", "batteryLevel", "status", "riskLevel"]
+    },
+    "ForestZone": {
+      "title": "ForestZone",
+      "description": "Forest reserve zone division monitored by sensors",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "location": { "type": "string", "maxLength": 150 },
+        "area": { "type": "string", "maxLength": 50 },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "riskLevel": { "type": "string", "enum": ["Low", "Moderate", "High", "Critical"] },
+        "activeSensors": { "type": "number" },
+        "totalSensors": { "type": "number" },
+        "lastUpdated": { "type": "string" }
+      },
+      "required": ["name", "location", "riskLevel", "activeSensors", "totalSensors"]
+    },
+    "Alert": {
+      "title": "Alert",
+      "description": "Real-time automated fire warning and hazard alert",
+      "type": "object",
+      "properties": {
+        "zoneId": { "type": "string", "maxLength": 50 },
+        "nodeId": { "type": "string", "maxLength": 50 },
+        "type": { "type": "string", "maxLength": 100 },
+        "message": { "type": "string", "maxLength": 300 },
+        "severity": { "type": "string", "enum": ["Critical", "High", "Warning", "Info"] },
+        "temperature": { "type": "number" },
+        "smokeLevel": { "type": "number" },
+        "humidity": { "type": "number" },
+        "timestamp": { "type": "string" },
+        "acknowledged": { "type": "boolean" },
+        "resolved": { "type": "boolean" }
+      },
+      "required": ["zoneId", "nodeId", "type", "message", "severity", "acknowledged", "resolved"]
+    },
+    "FireIncident": {
+      "title": "FireIncident",
+      "description": "Recorded fire incident tracking detection to resolution",
+      "type": "object",
+      "properties": {
+        "zoneId": { "type": "string", "maxLength": 50 },
+        "detectedAt": { "type": "string" },
+        "severity": { "type": "string", "enum": ["Critical", "High", "Moderate", "Low"] },
+        "status": { "type": "string", "enum": ["Detected", "Under Investigation", "Response Dispatched", "Contained", "Resolved", "False Alarm"] },
+        "temperature": { "type": "number" },
+        "smokeLevel": { "type": "number" },
+        "responseTime": { "type": "string", "maxLength": 50 },
+        "resolvedAt": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["zoneId", "detectedAt", "severity", "status", "description"]
+    },
+    "SensorReading": {
+      "title": "SensorReading",
+      "description": "Time-series environmental and hardware telemetry record",
+      "type": "object",
+      "properties": {
+        "nodeId": { "type": "string", "maxLength": 50 },
+        "zoneId": { "type": "string", "maxLength": 50 },
+        "temperature": { "type": "number" },
+        "humidity": { "type": "number" },
+        "smokeLevel": { "type": "number" },
+        "flameDetected": { "type": "boolean" },
+        "batteryLevel": { "type": "number" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["nodeId", "zoneId", "temperature", "humidity", "smokeLevel", "flameDetected", "batteryLevel", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "User profiles and RBAC permissions"
+    },
+    "/sensorNodes/{nodeId}": {
+      "schema": { "$ref": "SensorNode" },
+      "description": "IoT forest fire sensor node telemetry"
+    },
+    "/forestZones/{zoneId}": {
+      "schema": { "$ref": "ForestZone" },
+      "description": "Monitored forest reserves and danger states"
+    },
+    "/alerts/{alertId}": {
+      "schema": { "$ref": "Alert" },
+      "description": "Active and past fire notifications"
+    },
+    "/fireIncidents/{incidentId}": {
+      "schema": { "$ref": "FireIncident" },
+      "description": "Emergency incidents and dispatch tracking"
+    },
+    "/sensorReadings/{readingId}": {
+      "schema": { "$ref": "SensorReading" },
+      "description": "Historical telemetry for trend analytics"
+    }
+  }
+}

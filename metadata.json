@@ -1,0 +1,6 @@
+{
+  "name": "IGNIS WATCH – Solar-Powered LoRa Forest Fire Detection System",
+  "description": "Solar-Powered LoRa-Based Forest Fire Detection and Monitoring System for Forest Departments. Early Detection. Faster Response. Safer Forests.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
